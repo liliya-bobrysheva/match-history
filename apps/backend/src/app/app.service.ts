@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
+import { Observable, of } from 'rxjs';
 
 @Injectable()
 export class AppService {
-  getData(): { message: string } {
-    return { message: 'Welcome to backend!' };
+  getMatchesBySummonerName(name: string): Observable<any[]> {
+    return of([{ info: name }]);
   }
 }
