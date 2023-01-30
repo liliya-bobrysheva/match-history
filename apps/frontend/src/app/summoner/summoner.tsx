@@ -1,7 +1,22 @@
 import { Component } from 'react';
 import { MatchCard } from './match-card';
+import axios, { AxiosResponse } from 'axios';
 
 export class Summoner extends Component<{}> {
+  state = {
+    summonerName: '',
+    matches: [],
+    loading: false
+  }
+
+  componentDidMount() {
+    axios.get(`http://localhost:3333/api/matches/by-summoner-name/Tokiyami`)
+      .then((res: AxiosResponse) => {
+        const matches = res.data || [];
+        this.setState({ summonerName: 'Tokiyami', matches, loading: false });
+      })
+  }
+
   render() {
     return (
       <div>
@@ -16,6 +31,12 @@ export class Summoner extends Component<{}> {
           <MatchCard />
           <MatchCard />
           <MatchCard />
+          {
+            this.state.matches
+              .map((match: any) =>
+                <div key={match.info.gameId}>{match.info.gameId}</div>
+              )
+          }
         </div>
       </div>
     );
