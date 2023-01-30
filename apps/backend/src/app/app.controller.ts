@@ -1,5 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
-import { AppService } from './app.service';
+import { AppService, Match } from './app.service';
 import { Param } from '@nestjs/common/decorators';
 import { Observable } from 'rxjs';
 
@@ -10,7 +10,7 @@ export class AppController {
   @Get('matches/by-summoner-name/:name')
   getMatchesBySummonerName(
     @Param('name') name: string
-  ): Observable<any[]> {
+  ): Observable<Match[]> {
     return this.appService.getMatchesBySummonerName(name);
   }
 }
