@@ -6,7 +6,11 @@
 
 ## Development server
 
-Run `nx serve backend` for a dev server. Navigate to http://localhost:4200/. The app will automatically reload if you change any of the source files.
+Run `npx nx serve backend` for a NestJS backend server which will be available at http://localhost:3333/api.
+
+Run `npx nx serve frontend` for a React frontend which will be available at http://localhost:4200/.
+
+The apps will automatically reload if you change any of the source files.
 
 ## Understand this workspace
 
