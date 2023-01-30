@@ -1,19 +1,27 @@
 import { Component } from 'react';
 import { MatchCard } from './match-card';
-import axios, { AxiosResponse } from 'axios';
+import { ApiService } from './api-service';
 
 export class Summoner extends Component<{}> {
+  service = new ApiService;
+
   state = {
     summonerName: '',
     matches: [],
     loading: false
   }
 
-  componentDidMount() {
-    axios.get(`http://localhost:3333/api/matches/by-summoner-name/Tokiyami`)
-      .then((res: AxiosResponse) => {
+  onSummonerNameChange(summonerName: string) {
+    this.setState({
+      summonerName: '',
+      matches: [],
+      loading: true
+    });
+
+    this.service.getMatchesBySummonerName(summonerName)
+      .then((res: any) => {
         const matches = res.data || [];
-        this.setState({ summonerName: 'Tokiyami', matches, loading: false });
+        this.setState({ summonerName, matches, loading: false });
       })
   }
 
@@ -24,17 +32,13 @@ export class Summoner extends Component<{}> {
         <input
           type="text"
           placeholder="Enter Summoner Name"
-          onChange={(e: any) => console.log('summoner name has changed')}/>
+          onChange={(e: any) => this.onSummonerNameChange(e.target.value)}/>
 
         <div>
-          <MatchCard />
-          <MatchCard />
-          <MatchCard />
-          <MatchCard />
           {
             this.state.matches
               .map((match: any) =>
-                <div key={match.info.gameId}>{match.info.gameId}</div>
+                <MatchCard key={match.info.gameId} match={match}/>
               )
           }
         </div>
