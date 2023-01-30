@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import { MatchCard } from './match-card';
-import { ApiService } from './api-service';
+import { ApiService, Match } from '../api-service';
 
 export class Summoner extends Component<{}> {
   service = new ApiService;
@@ -19,8 +19,7 @@ export class Summoner extends Component<{}> {
     });
 
     this.service.getMatchesBySummonerName(summonerName)
-      .then((res: any) => {
-        const matches = res.data || [];
+      .then((matches: Match[]) => {
         this.setState({ summonerName, matches, loading: false });
       })
   }
