@@ -1,9 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { Observable, from, mergeMap, forkJoin, tap, map } from 'rxjs';
+import { Observable, from, mergeMap, forkJoin, map } from 'rxjs';
 import { RiotAPI, PlatformId, RiotAPITypes } from '@fightmegg/riot-api';
 
 export interface Match extends RiotAPITypes.MatchV5.MatchDTO {
   mainParticipant: RiotAPITypes.MatchV5.ParticipantDTO;
+}
+
+function isNamesIdentical(name1: string, name2: string): boolean {
+  return name1.replaceAll(' ', '').toLowerCase() === name2.replaceAll(' ', '').toLowerCase();
 }
 
 @Injectable()
@@ -27,9 +31,6 @@ export class AppService {
       region,
       summonerName
     })).pipe(
-      tap((summoner: RiotAPITypes.Summoner.SummonerDTO) => {
-        console.log(summoner)
-      }),
       mergeMap((summoner: RiotAPITypes.Summoner.SummonerDTO) =>
         from(this.api.matchV5.getIdsbyPuuid({
           puuid: summoner.puuid,
@@ -37,9 +38,6 @@ export class AppService {
           params
         })
         )),
-      tap((matchIds: string[]) => {
-        console.log(matchIds)
-      }),
       mergeMap((matchIds: string[]) =>
         forkJoin(matchIds.map(matchId =>
           from(this.api.matchV5.getMatchById({
@@ -49,7 +47,7 @@ export class AppService {
           )))),
       map((matches: Match[]) =>
         matches.map(match => {
-          match.mainParticipant = match.info.participants.find(participant => participant.summonerName === summonerName);
+          match.mainParticipant = match.info.participants.find(participant => isNamesIdentical(participant.summonerName, summonerName));
           return match;
         })
       )
