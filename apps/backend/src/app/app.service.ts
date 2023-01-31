@@ -16,7 +16,7 @@ export class AppService {
 
   constructor() {
     this.api = new RiotAPI(
-      "RGAPI-a567455f-c201-4b60-a849-aa5e3d97a384" // TODO fix exposed key
+      "RGAPI-949a7ba4-6d72-4a38-bc4f-701031626b5c" // TODO fix exposed key
     );
   }
 
